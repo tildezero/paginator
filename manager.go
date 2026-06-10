@@ -164,12 +164,11 @@ func (m *Manager) OnEvent(event bot.Event) {
 }
 
 func (m *Manager) makeEmbed(paginator *Pages) discord.Embed {
-	embedBuilder := discord.NewEmbed().
+	baseEmbed := discord.NewEmbed().
 		WithFooterText(fmt.Sprintf("Page: %d/%d", paginator.currentPage+1, paginator.Pages)).
 		WithColor(m.config.EmbedColor)
 
-	paginator.PageFunc(paginator.currentPage, &embedBuilder)
-	return embedBuilder
+	return paginator.PageFunc(paginator.currentPage, baseEmbed)
 }
 
 func (m *Manager) makeMessageCreate(pages *Pages, ephemeral bool) discord.MessageCreate {
