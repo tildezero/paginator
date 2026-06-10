@@ -24,7 +24,7 @@ const (
 
 type Pages struct {
 	ID          string
-	PageFunc    func(page int, embed *discord.Embed)
+	PageFunc    func(page int, embed discord.Embed) discord.Embed
 	Pages       int
 	Creator     snowflake.ID
 	ExpireMode  ExpireMode
@@ -120,14 +120,14 @@ func (m *Manager) OnEvent(event bot.Event) {
 	paginator, ok := m.pages[paginatorID]
 	if !ok {
 		if err := e.UpdateMessage(discord.NewMessageUpdate().ClearComponents()); err != nil {
-			e.Client().Logger.Error("Failed to remove components from timed out paginator: ", slog.Any("err", err))
+			e.Client().Logger.Error("Failed to remove components from timed out paginator", slog.Any("err", err))
 		}
 		return
 	}
 
 	if paginator.Creator != 0 && paginator.Creator != e.User().ID {
 		if err := e.CreateMessage(discord.NewMessageCreate().WithContent(m.config.NoPermissionMessage).WithEphemeral(true)); err != nil {
-			e.Client().Logger.Error("Failed to send error message: ", slog.Any("err", err))
+			e.Client().Logger.Error("Failed to send error message", slog.Any("err", err))
 		}
 		return
 	}
@@ -143,7 +143,7 @@ func (m *Manager) OnEvent(event bot.Event) {
 		err := e.UpdateMessage(discord.NewMessageUpdate().ClearComponents())
 		m.remove(paginatorID)
 		if err != nil {
-			e.Client().Logger.Error("Error updating paginator message: ", slog.Any("err", err))
+			e.Client().Logger.Error("Error updating paginator message", slog.Any("err", err))
 		}
 		return
 
@@ -159,7 +159,7 @@ func (m *Manager) OnEvent(event bot.Event) {
 	}
 
 	if err := e.UpdateMessage(m.makeMessageUpdate(paginator)); err != nil {
-		e.Client().Logger.Error("Error updating paginator message: ", slog.Any("err", err))
+		e.Client().Logger.Error("Error updating paginator message", slog.Any("err", err))
 	}
 }
 
