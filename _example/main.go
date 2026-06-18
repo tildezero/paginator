@@ -18,8 +18,8 @@ import (
 )
 
 var (
-	token   = os.Getenv("DISGO_TOKEN")
-	guildID = os.Getenv("DISGO_GUILD_ID")
+	token   = os.Getenv("disgo_token")
+	guildID = os.Getenv("disgo_guild_id")
 
 	commands = []discord.ApplicationCommandCreate{
 		discord.SlashCommandCreate{
